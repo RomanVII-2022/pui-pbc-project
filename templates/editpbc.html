@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Content -->
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4">Edit PBC Case</h4>
+    <!-- Responsive Table -->
+
+    <div class="card mb-4">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <h5 class="mb-0">Edit PBC Case Form</h5>
+          <small class="text-muted float-end">Edit PBC</small>
+        </div>
+        <div class="card-body">
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-fullname">Station Number</label>
+                            {{form.sno}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-fullname">Occurence Book Number</label>
+                            {{form.occurence_book_no}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-fullname">Police Station</label>
+                            {{form.police_station}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-fullname">Investigation Officer</label>
+                            {{form.investigating_officer}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-fullname">Complainant Name</label>
+                            {{form.complainant_name}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-fullname">Accused Name</label>
+                            {{form.accused_name}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-fullname">Offence</label>
+                            {{form.offence}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-fullname">Charge Registry Number</label>
+                            {{form.charge_registry_no}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-fullname">Court</label>
+                            {{form.court}}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label" for="basic-default-fullname">Court File Number</label>
+                            {{form.court_file_number}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="basic-default-fullname">Hearing/Mention Date</label>
+                    {{form.hearing_mention_date}}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="basic-default-fullname">Case File</label>
+                    {{form.case_file}}
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label" for="basic-default-email">Remarks</label>
+                  {{form.remarks}}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="basic-default-email">Results</label>
+                    {{form.results}}
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Update PBC Case</button>
+                </div> 
+            </form>
+
+        </div>
+    </div>
+    
+</div>
+
+  {% endblock %}
