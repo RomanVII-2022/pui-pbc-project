@@ -1,5 +1,5 @@
 from django import forms
-from myapp.models import MyUser, PendingBeforeCourt, PendingUnderInvestigation
+from myapp.models import MyUser, PendingBeforeCourt, PendingUnderInvestigation, PBCLog
 from phonenumber_field.formfields import PhoneNumberField
 import re
 
@@ -59,11 +59,12 @@ class EditUserForm(forms.ModelForm):
         fields = ('username', 'first_name', 'middle_name', 'last_name', 'force_number', 'phone_number', 'is_admin')
 
 class AddPBCForm(forms.ModelForm):
+    title = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter case title ...'}))
     sno = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter station number ...'}))
     occurence_book_no = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter occurence book number ...'}))
     police_station = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter police station ...'}))
     complainant_name = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter complainant name ...'}))
-    offence = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter offence ...'}))
+    offence = forms.CharField(max_length=200, widget=forms.Textarea(attrs={'class':'form-control', 'placeholder':'Enter offence ...'}))
     remarks = forms.CharField(max_length=200, widget=forms.Textarea(attrs={'class':'form-control', 'placeholder':'Enter remarks ...'}))
     results = forms.CharField(max_length=200, widget=forms.Textarea(attrs={'class':'form-control', 'placeholder':'Enter results ...'}))
     charge_registry_no = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter charge registry number ...'}))
@@ -84,6 +85,7 @@ class AddPBCForm(forms.ModelForm):
 
 
 class AddPUIForm(forms.ModelForm):
+    title = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter case title ...'}))
     sno = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter station number ...'}))
     occurence_book_no = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter occurence book number ...'}))
     police_station = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter police station ...'}))
@@ -103,4 +105,19 @@ class AddPUIForm(forms.ModelForm):
                 'investigating_officer':forms.Select(attrs={'class':'form-select'}),
                 'hearing_mention_date':  forms.DateTimeInput(format=('%Y-%m-%dT%H:%M'), attrs={'type': 'datetime-local', 'class': 'form-control'}),
                 'actual_date':  forms.DateTimeInput(attrs={'type': 'date', 'class': 'form-control'})
+        }
+
+
+class PBCCaseLogAddForm(forms.ModelForm):
+    title = forms.CharField(max_length=200, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter title ...'}))
+    comment = forms.CharField(max_length=200, widget=forms.Textarea(attrs={'class':'form-control', 'placeholder':'Write a comment ...'}), required=False)
+    hearing = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class':'form-check-input'}), required=False)
+    mention = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class':'form-check-input'}), required=False)
+
+    class Meta:
+        model = PBCLog
+        fields = ('title', 'comment', 'hearing', 'mention', 'hearing_mention_date', 'file_upload')
+
+        widgets = {
+                'hearing_mention_date':  forms.DateTimeInput(format=('%Y-%m-%dT%H:%M'), attrs={'type': 'datetime-local', 'class': 'form-control'}),
         }

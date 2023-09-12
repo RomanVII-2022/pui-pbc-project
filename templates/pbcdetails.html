@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Content -->
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4">PBC Case Details</h4>
+    <!-- Responsive Table -->
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card mb-4">
+            {% for message in messages %}
+              <div class="alert alert-success alert-dismissible" role="alert">
+                  <strong>Success Message: </strong> {{message}}.
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          <div class="card-header d-flex align-items-center justify-content-between">
+
+            <h5 class="mb-0">{{cassee.title}}</h5>
+            <small class="text-muted float-end">Case Details</small>
+          </div>
+          <div class="card-body">
+              <table class="table table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Item</th>
+                      <th scope="col">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <th><strong>Occurence Book Number</strong></th>
+                      <td>{{cassee.occurence_book_no}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <th>Complainant Name</th>
+                      <td>{{cassee.complainant_name}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">4</th>
+                      <th>Accused Name</th>
+                      <td>{{cassee.accused_name}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <th>Charge Registry Number</th>
+                      <td>{{cassee.charge_registry_no}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">5</th>
+                      <th>Court Name</th>
+                      <td>{{cassee.court}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+              <div class="card accordion-item active">
+                <h2 class="accordion-header" id="headingOne">
+                  <button
+                    type="button"
+                    class="accordion-button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#accordionOne"
+                    aria-expanded="true"
+                    aria-controls="accordionOne"
+                  >
+                    See More Details
+                  </button>
+                </h2>
+
+                <div
+                  id="accordionOne"
+                  class="accordion-collapse collapse show"
+                  data-bs-parent="#accordionExample"
+                >
+                  <div class="accordion-body">
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Hearing/Mention Date</th>
+                            <th scope="col">Hearing</th>
+                            <th scope="col">Mention</th>
+                            <th scope="col">Case File</th>
+                            <th scope="col">Comments</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for log in logs %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{log.title}}</td>
+                            <td>{{log.hearing_mention_date}}</td>
+                            <td>{{log.hearing}}</td>
+                            <td>{{log.mention}}</td>
+                            {% if log.file_upload %}
+                            <td><a href="{{log.file_upload.url}}" target="_blank"> See File</a></td>
+                            {% endif %}
+                            <td>{{log.comment|truncatewords:5|safe}}</td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <div class="card-header d-flex align-items-center justify-content-between">
+            <h5 class="mb-0">Add Case Details</h5>
+          </div>
+          <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <input type="hidden" value="{{cassee.id}}" name="caseId" />
+              <div class="mb-3">
+                <label class="form-label" for="basic-default-fullname">Comment</label>
+                {{form.title}}
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="basic-default-fullname">Comment</label>
+                {{form.comment}}
+              </div>
+              <div class="mb-3">
+                <div class="form-check mt-3">
+                  {{form.hearing}}
+                    <label class="form-check-label" for="defaultCheck1"> Hearing </label>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="form-check mt-3">
+                  {{form.mention}}
+                    <label class="form-check-label" for="defaultCheck1"> Mention </label>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="basic-default-company">Hearing/Mention Date</label>
+                {{form.hearing_mention_date}}
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="basic-default-company">Case File</label>
+                {{form.file_upload}}
+              </div>
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Add Details</button>
+              </div>
+            </form>
+            </div>
+        </div>
+      </div>
+    </div>
+    
+</div>
+
+  {% endblock %}

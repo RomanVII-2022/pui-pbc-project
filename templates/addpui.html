@@ -18,6 +18,12 @@
 
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label" for="basic-default-fullname">Case Title</label>
+                    {{form.title}}
+                </div>
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">

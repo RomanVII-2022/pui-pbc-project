@@ -1,13 +1,12 @@
-from django.forms.forms import BaseForm
-from django.forms.models import BaseModelForm
-from django.http.response import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
-from myapp.models import MyUser, PendingBeforeCourt, PendingUnderInvestigation
-from myapp.forms import AddUserForm, EditUserForm, AddPBCForm, AddPUIForm
+from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView
+from myapp.models import MyUser, PendingBeforeCourt, PendingUnderInvestigation, PBCLog
+from myapp.forms import AddUserForm, EditUserForm, AddPBCForm, AddPUIForm, PBCCaseLogAddForm
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
+from django.views import View
+from django.contrib import messages
 
 class Home(TemplateView):
     template_name = 'home.html'
@@ -56,6 +55,35 @@ class AddPBCView(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('pbc')
     success_message = 'Case has been added successfully'
 
+
+class DetailPBCView(View):
+    form_class = PBCCaseLogAddForm
+    initial = {"key": "value"}
+    template_name = 'pbcdetails.html'
+
+    def get(self, request, pk, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        cassee = PendingBeforeCourt.objects.get(id = pk)
+        logs = PBCLog.objects.filter(kase=pk).order_by('-created_at')
+        return render(request, self.template_name, {"form": form, "cassee":cassee, "logs":logs})
+    
+    def post(self, request, *args, **kwargs):
+        caseID = request.POST.get('caseId')
+        cs = PendingBeforeCourt.objects.get(id = caseID)
+        form = self.form_class(request.POST, request.FILES)
+        if form.is_valid():
+            title = form.cleaned_data.get('title')
+            comment = form.cleaned_data.get('comment')
+            hearing = form.cleaned_data.get('hearing')
+            mention = form.cleaned_data.get('mention')
+            hearing_mention_date = form.cleaned_data.get('hearing_mention_date')
+            file_upload = request.FILES['file_upload']
+
+            pbcLog = PBCLog.objects.create(kase=cs, title=title, comment=comment, hearing=hearing, mention=mention, hearing_mention_date=hearing_mention_date, file_upload=file_upload)
+            pbcLog.save()
+            messages.success(request, 'Case details have been added successfully')
+            return redirect(to=f'/details-pbc/{caseID}')
+
 class EditPBCView(SuccessMessageMixin, UpdateView):
     model = PendingBeforeCourt
     form_class = AddPBCForm
@@ -100,3 +128,4 @@ class DeletePUIView(SuccessMessageMixin, DeleteView):
     context_object_name = 'csui'
     success_url = reverse_lazy('pui')
     success_message = 'Case has been deleted successfully'
+

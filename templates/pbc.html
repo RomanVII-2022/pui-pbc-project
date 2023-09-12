@@ -41,7 +41,7 @@
                 <tr>
                     <td>{{forloop.counter}}</td>
                     <td>{{pbc.sno}}</td>
-                    <td>{{pbc.occurence_book_no}}</td>
+                    <td><a href="{% url 'detailpbc' pbc.id %}">{{pbc.occurence_book_no}}</a></td>
                     <td>{{pbc.police_station}}</td>
                     <td>{{pbc.complainant_name}}</td>
                     <td>{{pbc.charge_registry_no}}</td>

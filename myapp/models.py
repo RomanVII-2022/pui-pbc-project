@@ -38,7 +38,7 @@ class MyUserManager(BaseUserManager):
 class MyUser(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=200, unique=True)
     first_name = models.CharField(max_length=200)
-    middle_name = models.CharField(max_length=200)
+    middle_name = models.CharField(max_length=200, null=True, blank=True)
     last_name = models.CharField(max_length=200)
     force_number = models.CharField(max_length=200, unique=True)
     phone_number = PhoneNumberField()
@@ -68,15 +68,16 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
 class  Case(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=200)
     sno = models.CharField(max_length=200)
     occurence_book_no = models.CharField(max_length=200)
     police_station = models.CharField(max_length=200)
     complainant_name = models.CharField(max_length=200)
     offence = models.TextField()
     investigating_officer = models.ForeignKey(MyUser, on_delete=models.DO_NOTHING)
-    remarks = models.TextField()
-    results = models.TextField()
-    case_file = models.ImageField(upload_to='caseFiles/')
+    remarks = models.TextField(null=True, blank=True)
+    results = models.TextField(null=True, blank=True)
+    case_file = models.ImageField(upload_to='caseFiles/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
@@ -96,9 +97,15 @@ class PendingBeforeCourt(Case):
     
 
 class PBCLog(models.Model):
-    kase = models.ForeignKey(PendingBeforeCourt, on_delete=models.DO_NOTHING)  
-    comment = models.TextField()
-    file_upload = models.FileField()  
+    kase = models.ForeignKey(PendingBeforeCourt, on_delete=models.DO_NOTHING) 
+    title = models.CharField(max_length=200) 
+    comment = models.TextField(null=True, blank=True)
+    file_upload = models.FileField(null=True, blank=True)  
+    hearing = models.BooleanField(default=False)
+    mention = models.BooleanField(default=False)
+    hearing_mention_date = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.kase.occurence_book_no
@@ -111,8 +118,14 @@ class PendingUnderInvestigation(Case):
 
 class PUILog(models.Model):
     kase = models.ForeignKey(PendingUnderInvestigation, on_delete=models.DO_NOTHING)  
-    comment = models.TextField()
-    file_upload = models.FileField()  
+    title = models.CharField(max_length=200) 
+    comment = models.TextField(null=True, blank=True)
+    file_upload = models.FileField(null=True, blank=True)  
+    hearing = models.BooleanField(default=False)
+    mention = models.BooleanField(default=False)
+    hearing_mention_date = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.kase.occurence_book_no

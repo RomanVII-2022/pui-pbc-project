@@ -18,6 +18,12 @@
 
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label" for="basic-default-fullname">Case Title</label>
+                    {{form.title}}
+                </div>
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
@@ -66,8 +72,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label class="form-label" for="basic-default-fullname">Offence</label>
-                            {{form.offence}}
+                            <label class="form-label" for="basic-default-fullname">Hearing/Mention Date</label>
+                            {{form.hearing_mention_date}}
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -94,13 +100,13 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label" for="basic-default-fullname">Hearing/Mention Date</label>
-                    {{form.hearing_mention_date}}
+                    <label class="form-label" for="basic-default-fullname">Case File</label>
+                    {{form.case_file}}
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label" for="basic-default-fullname">Case File</label>
-                    {{form.case_file}}
+                    <label class="form-label" for="basic-default-fullname">Offence</label>
+                    {{form.offence}}
                 </div>
                 
                 <div class="mb-3">
